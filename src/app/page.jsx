@@ -3,15 +3,14 @@
 import Button from '@/components/ui/button';
 import ListPokemon from '@/features/pokemon/components/ListPokemon';
 import { pokemonServices } from '@/features/pokemon/pokemon.services';
+import { useLocalStorage } from '@/lib/hooks/useStorage';
 import { cn } from '@/lib/utils/helper';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import React from 'react';
 
 export default function Home() {
   const limit = 15;
   const { getList } = pokemonServices();
-
-  const [offset, setOffset] = React.useState(0);
+  const [pokemon] = useLocalStorage('pokemon', []);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery({
     queryKey: ['pokemon-list'],
@@ -25,20 +24,15 @@ export default function Home() {
     },
   });
 
-  const handleMore = () => {
-    setOffset(prev => prev + limit);
-    fetchNextPage();
-  };
-
   return (
     <div className={cn(['flex flex-col gap-4'])}>
       <h1 className={cn(['text-2xl font-bold'])}>Cari Pokémon</h1>
       {isLoading && <div>Sedang memuat...</div>}
-      {!isLoading && <ListPokemon data={data?.pages.flatMap(page => page)} />}
+      {!isLoading && <ListPokemon data={data?.pages.flatMap(page => page)} pokemon={pokemon} />}
 
       <div className={cn(['flex justify-center'])}>
         {hasNextPage && !isFetchingNextPage && (
-          <Button onClick={handleMore} className={cn(['w-fit'])}>
+          <Button onClick={fetchNextPage} className={cn(['w-fit'])}>
             Lihat Lebih Banyak
           </Button>
         )}

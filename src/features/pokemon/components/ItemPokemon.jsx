@@ -1,10 +1,12 @@
+'use client';
+
 import { axiosInstance } from '@/lib/config/axios';
 import { cn } from '@/lib/utils/helper';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import React from 'react';
 
-export default function ItemPokemon({ data }) {
+export default function ItemPokemon({ data, isHome, isCatch }) {
   const { data: pokemon, isLoading } = useQuery({
     queryKey: ['pokemon', data.name],
     queryFn: () => axiosInstance.get(data.url),
@@ -13,7 +15,8 @@ export default function ItemPokemon({ data }) {
   return (
     <div
       className={cn([
-        'flex h-full cursor-pointer items-start justify-between rounded-lg bg-white p-4 shadow transition-all duration-300 hover:scale-105 hover:shadow-lg',
+        'flex h-full cursor-pointer items-start justify-between rounded-lg p-4 shadow transition-all duration-300 hover:scale-105 hover:shadow-lg',
+        isHome && isCatch ? 'bg-green-100' : 'bg-white',
       ])}
     >
       {isLoading || !pokemon ? (
