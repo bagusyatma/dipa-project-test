@@ -28,7 +28,7 @@ export default function Page() {
       ) : (
         <div className={cn(['flex flex-col gap-4'])}>
           <div>
-            <div>Anda belum menangkap monster!</div>
+            <div>Anda belum menangkap Pokémon!</div>
             <div>Ayo tangkap dan kumpulkan sebanyaknya!</div>
           </div>
           <Link href={routes.home} prefetch>
